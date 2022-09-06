@@ -1,4 +1,4 @@
-package opg3;
+package opg4;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
