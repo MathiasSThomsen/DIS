@@ -21,6 +21,9 @@ public class TCPClient {
 		
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+		outToServer.writeBytes("Vil du lege med mig" + '\n');
+		System.out.println(inFromServer.readLine());
+
 		while(true) {
 			sentence = inFromUser.readLine();
 			outToServer.writeBytes(sentence + '\n');

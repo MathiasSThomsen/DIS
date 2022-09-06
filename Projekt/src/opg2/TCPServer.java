@@ -14,18 +14,31 @@ public class TCPServer {
 		String clientSentence;
 		String sentence;
 
-		ServerSocket welcomSocket = new ServerSocket(6789);
-		Socket connectionSocket = welcomSocket.accept();
-		BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-		DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-		
-		while(true){
+		ServerSocket welcomSocket = new ServerSocket(6789);
 
-			clientSentence = inFromClient.readLine();
-			System.out.println("FROM CLIENT: " + clientSentence);
-			sentence = inFromUser.readLine();
-			outToClient.writeBytes(sentence + '\n');
+		while(true) {
+			Socket connectionSocket = welcomSocket.accept();
+			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+			DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+
+			String startBesked = inFromClient.readLine();
+			System.out.println(startBesked);
+			System.out.println("skriv J for ja");
+			String svar = inFromUser.readLine();
+
+			if (svar.equals("J")) {
+
+				outToClient.writeBytes("Jeg vil gerne lege med dig, din tur" + '\n');
+
+				while (true) {
+
+					clientSentence = inFromClient.readLine();
+					System.out.println("FROM CLIENT: " + clientSentence);
+					sentence = inFromUser.readLine();
+					outToClient.writeBytes(sentence + '\n');
+				}
+			}else System.out.println("du gad ikke at snakke, ok det er da også fint så ☻");
 		}
 
 	}
