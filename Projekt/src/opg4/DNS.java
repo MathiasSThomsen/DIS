@@ -1,9 +1,5 @@
 package opg4;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +15,7 @@ public class DNS {
 
         DatagramSocket serverSocket = new DatagramSocket(9876);
         byte[] receiveData = new byte[1024];
-        byte[] sendData = new byte[1024];
+        byte[] sendData;
 
         while (true) {
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);

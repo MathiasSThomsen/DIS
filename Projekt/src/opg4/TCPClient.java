@@ -2,7 +2,6 @@ package opg4;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -12,7 +11,7 @@ import java.net.Socket;
 
 public class TCPClient {
 
-	public static void main(String[] args) throws Exception, IOException {
+	public static void main(String[] args) throws Exception {
 		
 		SendThread sendThread;
 		ModtagThread modtagThread;
@@ -23,7 +22,7 @@ public class TCPClient {
 
 		DatagramSocket dnsClientSocket = new DatagramSocket();
 		InetAddress IPAddress = InetAddress.getByName("10.10.139.75");
-		byte[] sendData = new byte[1024];
+		byte[] sendData;
 		byte[] receiveData = new byte[1024];
 
 		System.out.println("Write a name:");

@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class ModtagThread extends Thread{
-    private Socket connectionSocket;
+    private final Socket connectionSocket;
     private Boolean dead;
 
     public ModtagThread(Socket connectionSocket) {
