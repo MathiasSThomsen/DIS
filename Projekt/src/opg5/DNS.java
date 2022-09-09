@@ -31,14 +31,21 @@ public class DNS {
             if (sentence.contains("Opret:")) {
                 String name = sentence.split(":")[1].trim();
                 String ip = IPAddress.toString().replace("/", "");
-                ipListe.put(name, ip);
 
-                sendData = "Server Oprettet".getBytes();
+                sendData = opretServer(name, ip, ipListe).getBytes();
                 DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
                 serverSocket.send(sendPacket);
 
                 System.out.println(ipListe);
 
+            } else if (sentence.contains("List")) {
+                StringBuilder sb = new StringBuilder();
+                for (String navn : ipListe.keySet()) {
+                    sb.append(navn).append(", ");
+                }
+                sendData = sb.toString().getBytes();
+                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+                serverSocket.send(sendPacket);
             } else {
                 System.out.println(sentence);
                 String ipRequest = ipListe.get(sentence.trim());
@@ -49,5 +56,26 @@ public class DNS {
                 serverSocket.send(sendPacket);
             }
         }
+
+    }
+
+    private static String opretServer(String nytNavn, String ip, Map<String, String> ipListe) {
+        if (ipListe.containsValue(ip)) {
+            String key = "";
+            for (String k : ipListe.keySet()) {
+                if (ipListe.get(k).equals(ip)) {
+                    key = k;
+                    break;
+                }
+            }
+            ipListe.remove(key);
+        }
+
+        if (ipListe.containsKey(nytNavn)) {
+            return "Navn er taget";
+        }
+
+        ipListe.put(nytNavn, ip);
+        return "Oprettet";
     }
 }

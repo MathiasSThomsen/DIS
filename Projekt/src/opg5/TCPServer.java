@@ -18,23 +18,27 @@ public class TCPServer {
 
         // DNS-------------------------------------------------
 
-        DatagramSocket dnsClientSocket = new DatagramSocket();
-        InetAddress IPAddress = InetAddress.getByName("10.10.139.75");
-        byte[] sendData;
-        byte[] receiveData = new byte[1024];
+        String acknowledgement = "";
 
-        System.out.println("Write 'Opret:' and a name you want to call this server:");
-        String sentence = inFromUser.readLine();
-        sendData = sentence.getBytes();
-        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
-        dnsClientSocket.send(sendPacket);
+        while (!acknowledgement.contains("Oprettet")) {
+            DatagramSocket dnsClientSocket = new DatagramSocket();
+            InetAddress IPAddress = InetAddress.getByName("10.10.139.75");
+            byte[] sendData;
+            byte[] receiveData = new byte[1024];
 
-        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-        dnsClientSocket.receive(receivePacket);
+            System.out.println("Write 'Opret:' and a name you want to call this server:");
+            String sentence = inFromUser.readLine();
+            sendData = sentence.getBytes();
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
+            dnsClientSocket.send(sendPacket);
 
-        String acknowledgement = new String(receivePacket.getData());
-        System.out.println("FROM DNS:" + acknowledgement.trim());
-        dnsClientSocket.close();
+            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+            dnsClientSocket.receive(receivePacket);
+
+            acknowledgement = new String(receivePacket.getData());
+            System.out.println("FROM DNS:" + acknowledgement.trim());
+            dnsClientSocket.close();
+        }
 
         // DNS-------------------------------------------------
 

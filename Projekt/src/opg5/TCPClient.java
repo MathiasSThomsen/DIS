@@ -20,23 +20,30 @@ public class TCPClient {
 
         //DNS--------------------------------------------------------
 
-        DatagramSocket dnsClientSocket = new DatagramSocket();
-        InetAddress IPAddress = InetAddress.getByName("10.10.139.75");
-        byte[] sendData;
-        byte[] receiveData = new byte[1024];
+        String ip = "";
 
-        System.out.println("Write a name:");
-        String sentence = inFromUser.readLine();
-        sendData = sentence.getBytes();
-        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
-        dnsClientSocket.send(sendPacket);
+        while (ip.equals("")) {
+            DatagramSocket dnsClientSocket = new DatagramSocket();
+            InetAddress IPAddress = InetAddress.getByName("10.10.139.75");
+            byte[] sendData;
+            byte[] receiveData = new byte[1024];
 
-        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-        dnsClientSocket.receive(receivePacket);
+            System.out.println("Write a name of a server, or 'List' to get a list of server names:");
+            String sentence = inFromUser.readLine();
+            sendData = sentence.getBytes();
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
+            dnsClientSocket.send(sendPacket);
 
-        String ip = new String(receivePacket.getData());
-        System.out.println("FROM DNS:" + ip.trim());
-        dnsClientSocket.close();
+            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+            dnsClientSocket.receive(receivePacket);
+
+            ip = new String(receivePacket.getData());
+            System.out.println("FROM DNS:" + ip.trim());
+
+            if (!ip.contains("10.10.")) ip = "";
+
+            dnsClientSocket.close();
+        }
 
         //DNS--------------------------------------------------------
 
