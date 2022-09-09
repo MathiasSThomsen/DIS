@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class SendThread extends Thread{
-    private Socket connectionSocket;
-    private BufferedReader inFromUser;
+    private final Socket connectionSocket;
+    private final BufferedReader inFromUser;
     private Boolean dead;
 
     public SendThread(Socket connectionSocket, BufferedReader inFromUser) {
