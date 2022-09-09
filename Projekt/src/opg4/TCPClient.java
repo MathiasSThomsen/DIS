@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.Socket;
 
 
@@ -18,16 +21,26 @@ public class TCPClient {
 
 		//DNS--------------------------------------------------------
 
-		Socket dnsClientSocket = new Socket("localhost", 6789);
-		DataOutputStream dnsOutToServer = new DataOutputStream(dnsClientSocket.getOutputStream());
-		BufferedReader dnsInFromServer = new BufferedReader(new InputStreamReader(dnsClientSocket.getInputStream()));
+		DatagramSocket dnsClientSocket = new DatagramSocket();
+		InetAddress IPAddress = InetAddress.getByName("10.10.139.75");
+		byte[] sendData = new byte[1024];
+		byte[] receiveData = new byte[1024];
 
-		String navn = inFromUser.readLine();
-		dnsOutToServer.writeBytes(navn);
-		String ip = dnsInFromServer.readLine();
+		System.out.println("Write a name:");
+		String sentence = inFromUser.readLine();
+		sendData = sentence.getBytes();
+		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
+		dnsClientSocket.send(sendPacket);
+
+		DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+		dnsClientSocket.receive(receivePacket);
+
+		String ip = new String(receivePacket.getData());
+		System.out.println("FROM DNS:" + ip.trim());
+		dnsClientSocket.close();
 
 		//DNS--------------------------------------------------------
-		
+
 		Socket clientSocket = new Socket(ip, 6789);
 		DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 
