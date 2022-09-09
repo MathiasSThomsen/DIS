@@ -24,7 +24,6 @@ public class DNS {
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             serverSocket.receive(receivePacket);
             String sentence = new String(receivePacket.getData());
-            System.out.println(sentence);
             InetAddress IPAddress = receivePacket.getAddress();
             int port = receivePacket.getPort();
 
@@ -47,10 +46,8 @@ public class DNS {
                 DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
                 serverSocket.send(sendPacket);
             } else {
-                System.out.println(sentence);
                 String ipRequest = ipListe.get(sentence.trim());
                 System.out.println(ipRequest);
-                System.out.println(ipListe);
                 sendData = ipRequest.getBytes();
                 DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
                 serverSocket.send(sendPacket);
