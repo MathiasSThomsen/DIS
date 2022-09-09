@@ -10,10 +10,6 @@ public class DNS {
     public static void main(String[] args) throws Exception {
 
         Map<String, String> ipListe = new HashMap<>();
-        ipListe.put("David", "10.10.139.75");
-        ipListe.put("Camilla", "10.10.131.221");
-        ipListe.put("Mathias", "10.10.139.56");
-
 
         DatagramSocket serverSocket = new DatagramSocket(9876);
         byte[] receiveData;
