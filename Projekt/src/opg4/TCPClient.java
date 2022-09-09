@@ -11,62 +11,62 @@ import java.net.Socket;
 
 public class TCPClient {
 
-	public static void main(String[] args) throws Exception {
-		
-		SendThread sendThread;
-		ModtagThread modtagThread;
-		
-		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws Exception {
 
-		//DNS--------------------------------------------------------
+        SendThread sendThread;
+        ModtagThread modtagThread;
 
-		DatagramSocket dnsClientSocket = new DatagramSocket();
-		InetAddress IPAddress = InetAddress.getByName("10.10.139.75");
-		byte[] sendData;
-		byte[] receiveData = new byte[1024];
+        BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
 
-		System.out.println("Write a name:");
-		String sentence = inFromUser.readLine();
-		sendData = sentence.getBytes();
-		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
-		dnsClientSocket.send(sendPacket);
+        //DNS--------------------------------------------------------
 
-		DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-		dnsClientSocket.receive(receivePacket);
+        DatagramSocket dnsClientSocket = new DatagramSocket();
+        InetAddress IPAddress = InetAddress.getByName("10.10.139.75");
+        byte[] sendData;
+        byte[] receiveData = new byte[1024];
 
-		String ip = new String(receivePacket.getData());
-		System.out.println("FROM DNS:" + ip.trim());
-		dnsClientSocket.close();
+        System.out.println("Write a name:");
+        String sentence = inFromUser.readLine();
+        sendData = sentence.getBytes();
+        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
+        dnsClientSocket.send(sendPacket);
 
-		//DNS--------------------------------------------------------
+        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+        dnsClientSocket.receive(receivePacket);
 
-		Socket clientSocket = new Socket(ip, 6789);
-		DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+        String ip = new String(receivePacket.getData());
+        System.out.println("FROM DNS:" + ip.trim());
+        dnsClientSocket.close();
 
-		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        //DNS--------------------------------------------------------
 
-		outToServer.writeBytes("Vil du lege med mig" + '\n');
-		System.out.println(inFromServer.readLine());
+        Socket clientSocket = new Socket(ip, 6789);
+        DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 
-		sendThread = new SendThread(clientSocket, inFromUser);
-		sendThread.start();
+        BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-		modtagThread = new ModtagThread(clientSocket);
-		modtagThread.start();
+        outToServer.writeBytes("Vil du lege med mig" + '\n');
+        System.out.println(inFromServer.readLine());
 
-		while(true) {
+        sendThread = new SendThread(clientSocket, inFromUser);
+        sendThread.start();
 
-			if(modtagThread.getDead()) {
-				modtagThread = new ModtagThread(clientSocket);
-				modtagThread.start();
-			}
+        modtagThread = new ModtagThread(clientSocket);
+        modtagThread.start();
 
-			if(sendThread.getDead()) {
-				sendThread = new SendThread(clientSocket, inFromUser);
-				sendThread.start();
-			}
-		}
-			
-	}
+        while (true) {
+
+            if (modtagThread.getDead()) {
+                modtagThread = new ModtagThread(clientSocket);
+                modtagThread.start();
+            }
+
+            if (sendThread.getDead()) {
+                sendThread = new SendThread(clientSocket, inFromUser);
+                sendThread.start();
+            }
+        }
+
+    }
 
 }

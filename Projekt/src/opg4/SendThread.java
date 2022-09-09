@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class SendThread extends Thread{
+public class SendThread extends Thread {
     private final Socket connectionSocket;
     private final BufferedReader inFromUser;
     private Boolean dead;

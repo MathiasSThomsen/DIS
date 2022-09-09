@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class ModtagThread extends Thread{
+public class ModtagThread extends Thread {
     private final Socket connectionSocket;
     private Boolean dead;
 
